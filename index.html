@@ -90,7 +90,7 @@
       border: 2px solid transparent;
       transition: all 0.2s ease;
       min-width: 48px;
-      min-height: 44px; /* Touch target optimized */
+      min-height: 44px;
     }
 
     .btn-true {
@@ -176,6 +176,39 @@
       font-size: 0.825rem;
       color: #334155;
       margin-bottom: 1rem;
+    }
+
+    /* Precedence List Table */
+    .precedence-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    .precedence-table th {
+      background-color: #f1f5f9;
+      font-weight: 600;
+      padding: 0.6rem;
+      border: 1px solid var(--border);
+    }
+
+    .precedence-table td {
+      padding: 0.6rem;
+      border: 1px solid var(--border);
+    }
+
+    .rank-badge {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background-color: #eff6ff;
+      color: var(--primary);
+      font-weight: bold;
+      border-radius: 50%;
+      font-size: 0.8rem;
     }
 
     /* Tables & Responsive Wrapper */
@@ -278,7 +311,7 @@
 </head>
 <body>
 
-  <h1>Boolean Logic Operators</h1>
+  <h1>Boolean Operators</h1>
   <p class="subtitle">Tap any cell to reveal its answer or adjust inputs above.</p>
 
   <!-- Global Controller -->
@@ -300,6 +333,62 @@
   </div>
 
   <div class="grid">
+
+    <!-- Order of Precedence Card -->
+    <div class="card full-width">
+      <div class="card-title">Order of Precedence (Evaluation Order)</div>
+      <div class="description">When combining multiple logical operators without parentheses, expressions are evaluated from highest precedence to lowest.</div>
+      <div class="table-responsive">
+        <table class="precedence-table">
+          <thead>
+            <tr>
+              <th style="width: 80px; text-align: center;">Priority</th>
+              <th>Operator Name</th>
+              <th style="text-align: center;">Symbol</th>
+              <th>Rule / Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center;"><span class="rank-badge">1</span></td>
+              <td><strong>Parentheses</strong></td>
+              <td style="text-align: center;"><span class="symbol">( )</span></td>
+              <td>Always evaluated first; overrides default precedence order.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="rank-badge">2</span></td>
+              <td><strong>Negation (NOT)</strong></td>
+              <td style="text-align: center;"><span class="symbol">¬, ~</span></td>
+              <td>Highest operator precedence; applies directly to the target statement.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="rank-badge">3</span></td>
+              <td><strong>Conjunction (AND)</strong></td>
+              <td style="text-align: center;"><span class="symbol">∧, &</span></td>
+              <td>Evaluated before OR, XOR, Conditional, or Biconditional operators.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="rank-badge">4</span></td>
+              <td><strong>Disjunction (OR) & XOR</strong></td>
+              <td style="text-align: center;"><span class="symbol">∨, ⊕</span></td>
+              <td>Evaluated after AND, but before implication operators.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="rank-badge">5</span></td>
+              <td><strong>Conditional (IF...THEN)</strong></td>
+              <td style="text-align: center;"><span class="symbol">→</span></td>
+              <td>Evaluated after standard logical connectives.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="rank-badge">6</span></td>
+              <td><strong>Biconditional (IFF)</strong></td>
+              <td style="text-align: center;"><span class="symbol">↔</span></td>
+              <td>Lowest operator precedence; evaluated last.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <!-- Conjunction (AND) -->
     <div class="card">
