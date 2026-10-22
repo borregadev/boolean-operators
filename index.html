@@ -3,21 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boolean Operators</title>
+  <title>Boolean Operators Study Guide & Interactive Quiz</title>
   <style>
     :root {
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --true-bg: #dcfce7;
-      --true-text: #15803d;
-      --false-bg: #fee2e2;
-      --false-text: #b91c1c;
-      --highlight: #e0f2fe;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --true-bg: #064e3b;
+      --true-text: #4ade80;
+      --true-border: #15803d;
+      --false-bg: #7f1d1d;
+      --false-text: #fca5a5;
+      --false-border: #b91c1c;
+      --highlight: #1e3a8a;
+      --correct-bg: #064e3b;
+      --correct-text: #4ade80;
+      --correct-border: #15803d;
+      --wrong-bg: #7f1d1d;
+      --wrong-text: #fca5a5;
+      --wrong-border: #b91c1c;
     }
 
     * {
@@ -37,22 +45,54 @@
     h1 {
       text-align: center;
       margin-bottom: 0.25rem;
-      font-size: 1.5rem;
+      font-size: 1.75rem;
     }
 
     p.subtitle {
       text-align: center;
       color: var(--muted);
       margin-bottom: 1.5rem;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
-    /* Controls Panel */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
     .global-controls {
       background: var(--card-bg);
       padding: 1rem;
       border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
@@ -96,13 +136,13 @@
     .btn-true {
       background-color: var(--true-bg);
       color: var(--true-text);
-      border-color: #86efac;
+      border-color: var(--true-border);
     }
 
     .btn-false {
       background-color: var(--false-bg);
       color: var(--false-text);
-      border-color: #fca5a5;
+      border-color: var(--false-border);
     }
 
     .btn-action {
@@ -123,7 +163,6 @@
       background-color: var(--primary-hover);
     }
 
-    /* Grid & Cards */
     .grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -135,7 +174,7 @@
       border-radius: 10px;
       padding: 1.25rem;
       border: 1px solid var(--border);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
     }
@@ -156,10 +195,10 @@
       color: var(--primary);
       font-family: monospace;
       font-size: 1rem;
-      background: #eff6ff;
+      background: #0f172a;
       padding: 0.15rem 0.5rem;
       border-radius: 4px;
-      border: 1px solid #dbeafe;
+      border: 1px solid var(--border);
     }
 
     .description {
@@ -169,16 +208,18 @@
     }
 
     .example-box {
-      background-color: #f1f5f9;
+      background-color: #0f172a;
       border-left: 3px solid var(--primary);
       padding: 0.5rem 0.75rem;
       border-radius: 0 4px 4px 0;
       font-size: 0.825rem;
-      color: #334155;
+      color: #cbd5e1;
       margin-bottom: 1rem;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }
 
-    /* Precedence List Table */
     .precedence-table {
       width: 100%;
       border-collapse: collapse;
@@ -187,7 +228,8 @@
     }
 
     .precedence-table th {
-      background-color: #f1f5f9;
+      background-color: #0f172a;
+      color: #cbd5e1;
       font-weight: 600;
       padding: 0.6rem;
       border: 1px solid var(--border);
@@ -204,14 +246,14 @@
       height: 24px;
       line-height: 24px;
       text-align: center;
-      background-color: #eff6ff;
+      background-color: #0f172a;
       color: var(--primary);
       font-weight: bold;
       border-radius: 50%;
       font-size: 0.8rem;
+      border: 1px solid var(--border);
     }
 
-    /* Tables & Responsive Wrapper */
     .table-responsive {
       width: 100%;
       overflow-x: auto;
@@ -235,7 +277,8 @@
     }
 
     th {
-      background-color: #f1f5f9;
+      background-color: #0f172a;
+      color: #cbd5e1;
       font-weight: 600;
       font-size: 0.8rem;
     }
@@ -245,7 +288,6 @@
       font-weight: bold;
     }
 
-    /* Reveal Mechanics */
     .cell-reveal {
       cursor: pointer;
       user-select: none;
@@ -257,8 +299,8 @@
       display: inline-block;
       padding: 0.2rem 0.4rem;
       border-radius: 4px;
-      background-color: #e2e8f0;
-      color: #64748b;
+      background-color: #334155;
+      color: #94a3b8;
       font-size: 0.75rem;
       font-weight: 600;
     }
@@ -279,10 +321,127 @@
       display: inline-block;
     }
 
-    .badge-t { background-color: var(--true-bg); color: var(--true-text); }
-    .badge-f { background-color: var(--false-bg); color: var(--false-text); }
+    .badge-t { background-color: var(--true-bg); color: var(--true-text); border: 1px solid var(--true-border); }
+    .badge-f { background-color: var(--false-bg); color: var(--false-text); border: 1px solid var(--false-border); }
 
-    /* Tablet and Desktop Adjustments */
+    .scoreboard {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .score-num {
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    .btn-reset {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background-color: var(--muted);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .quiz-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      margin-bottom: 1.25rem;
+    }
+
+    .q-number {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      background-color: #0f172a;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background-color: #334155;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-btn.correct {
+      background-color: var(--correct-bg) !important;
+      color: var(--correct-text) !important;
+      border-color: var(--correct-border) !important;
+      font-weight: 700;
+    }
+
+    .option-btn.wrong {
+      background-color: var(--wrong-bg) !important;
+      color: var(--wrong-text) !important;
+      border-color: var(--wrong-border) !important;
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.correct-fb {
+      background-color: #064e3b;
+      border: 1px solid var(--correct-border);
+      color: var(--correct-text);
+    }
+
+    .feedback.wrong-fb {
+      background-color: #7f1d1d;
+      border: 1px solid var(--wrong-border);
+      color: var(--wrong-text);
+    }
+
     @media (min-width: 640px) {
       body { padding: 2rem; }
       h1 { font-size: 2rem; }
@@ -312,275 +471,304 @@
 <body>
 
   <h1>Boolean Operators</h1>
-  <p class="subtitle">Tap any cell to reveal its answer or adjust inputs above.</p>
+  <p class="subtitle">Interactive Study Guide, Truth Tables & Self-Assessment Quizzes</p>
 
-  <!-- Global Controller -->
-  <div class="global-controls">
-    <div class="toggles-wrapper">
-      <div class="toggle-group">
-        <span>p:</span>
-        <button id="btn-p" class="btn-toggle btn-true" onclick="toggleState('p')">T</button>
+  <div class="nav-tabs">
+    <button id="tab-btn-tables" class="tab-btn active" onclick="switchTab('tables')">Truth Tables Reference</button>
+    <button id="tab-btn-quiz" class="tab-btn" onclick="switchTab('quiz')">Interactive Quiz</button>
+  </div>
+
+  <div id="tab-tables" class="tab-content active">
+    
+    <div class="global-controls">
+      <div class="toggles-wrapper">
+        <div class="toggle-group">
+          <span>p:</span>
+          <button id="btn-p" class="btn-toggle btn-true" onclick="toggleState('p')">T</button>
+        </div>
+        <div class="toggle-group">
+          <span>q:</span>
+          <button id="btn-q" class="btn-toggle btn-true" onclick="toggleState('q')">T</button>
+        </div>
       </div>
-      <div class="toggle-group">
-        <span>q:</span>
-        <button id="btn-q" class="btn-toggle btn-true" onclick="toggleState('q')">T</button>
+      <div class="actions-wrapper">
+        <button class="btn-action" onclick="revealAll()">Reveal All</button>
+        <button class="btn-action" style="background-color: #475569;" onclick="hideAll()">Hide All</button>
       </div>
     </div>
-    <div class="actions-wrapper">
-      <button class="btn-action" onclick="revealAll()">Reveal All</button>
-      <button class="btn-action" style="background-color: #64748b;" onclick="hideAll()">Hide All</button>
+
+    <div class="grid">
+
+      <!-- Order of Precedence Card -->
+      <div class="card full-width">
+        <div class="card-title">Order of Precedence (Evaluation Order)</div>
+        <div class="description">When combining multiple logical operators without parentheses, expressions are evaluated from highest precedence to lowest.</div>
+        <div class="table-responsive">
+          <table class="precedence-table">
+            <thead>
+              <tr>
+                <th style="width: 80px; text-align: center;">Priority</th>
+                <th>Operator Name</th>
+                <th style="text-align: center;">Symbol</th>
+                <th>Rule / Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: center;"><span class="rank-badge">1</span></td>
+                <td><strong>Parentheses</strong></td>
+                <td style="text-align: center;"><span class="symbol">( )</span></td>
+                <td>Always evaluated first; overrides default precedence order.</td>
+              </tr>
+              <tr>
+                <td style="text-align: center;"><span class="rank-badge">2</span></td>
+                <td><strong>Negation (NOT)</strong></td>
+                <td style="text-align: center;"><span class="symbol">¬, ~</span></td>
+                <td>Highest operator precedence; applies directly to the target statement.</td>
+              </tr>
+              <tr>
+                <td style="text-align: center;"><span class="rank-badge">3</span></td>
+                <td><strong>Conjunction (AND)</strong></td>
+                <td style="text-align: center;"><span class="symbol">∧, &</span></td>
+                <td>Evaluated before OR, XOR, Conditional, or Biconditional operators.</td>
+              </tr>
+              <tr>
+                <td style="text-align: center;"><span class="rank-badge">4</span></td>
+                <td><strong>Disjunction (OR) & XOR</strong></td>
+                <td style="text-align: center;"><span class="symbol">∨, ⊕</span></td>
+                <td>Evaluated after AND, but before implication operators.</td>
+              </tr>
+              <tr>
+                <td style="text-align: center;"><span class="rank-badge">5</span></td>
+                <td><strong>Conditional (IF...THEN)</strong></td>
+                <td style="text-align: center;"><span class="symbol">→</span></td>
+                <td>Evaluated after standard logical connectives.</td>
+              </tr>
+              <tr>
+                <td style="text-align: center;"><span class="rank-badge">6</span></td>
+                <td><strong>Biconditional (IFF)</strong></td>
+                <td style="text-align: center;"><span class="symbol">↔</span></td>
+                <td>Lowest operator precedence; evaluated last.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Conjunction (AND) -->
+      <div class="card">
+        <div class="card-title">Conjunction (AND) <span class="symbol">p ∧ q</span></div>
+        <div class="description">True only when <strong>both</strong> inputs are True.</div>
+        <div class="example-box">
+          <strong>Example:</strong> "It is raining (p) <em>AND</em> it is daytime (q)."
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>p</th><th>q</th><th>p ∧ q</th></tr></thead>
+            <tbody>
+              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Disjunction (OR) -->
+      <div class="card">
+        <div class="card-title">Disjunction (OR) <span class="symbol">p ∨ q</span></div>
+        <div class="description">True if <strong>at least one</strong> input is True.</div>
+        <div class="example-box">
+          <strong>Example:</strong> "It is raining (p) <em>OR</em> it is daytime (q)."
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>p</th><th>q</th><th>p ∨ q</th></tr></thead>
+            <tbody>
+              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Negation (NOT) -->
+      <div class="card">
+        <div class="card-title">Negation (NOT) <span class="symbol">¬p</span></div>
+        <div class="description">Inverts the truth value of proposition <strong>p</strong>.</div>
+        <div class="example-box">
+          <strong>Example:</strong> "It is <em>NOT</em> raining (p)."
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>p</th><th>¬p</th></tr></thead>
+            <tbody>
+              <tr data-p="true"><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+              <tr data-p="false"><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Exclusive OR (XOR) -->
+      <div class="card">
+        <div class="card-title">Exclusive OR (XOR) <span class="symbol">p ⊕ q</span></div>
+        <div class="description">True if p or q is True, <strong>but not both</strong>.</div>
+        <div class="example-box">
+          <strong>Example:</strong> "It is raining (p) or snowing (q), <em>but not both</em>."
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>p</th><th>q</th><th>p ⊕ q</th></tr></thead>
+            <tbody>
+              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Conditional (IF...THEN) -->
+      <div class="card">
+        <div class="card-title">Conditional (IF...THEN) <span class="symbol">p → q</span></div>
+        <div class="description">False <strong>only</strong> when p is True and q is False.</div>
+        <div class="example-box">
+          <strong>Example:</strong> "<em>IF</em> you are late (p), <em>THEN</em> you are fired (q)."
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>p</th><th>q</th><th>p → q</th></tr></thead>
+            <tbody>
+              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Biconditional (IFF) -->
+      <div class="card">
+        <div class="card-title">Biconditional (IFF) <span class="symbol">p ↔ q</span></div>
+        <div class="description">True only when p and q share the <strong>same value</strong>.</div>
+        <div class="example-box">
+          <strong>Example:</strong> "The switch is ON (p) <em>IF AND ONLY IF</em> the bulb is glowing (q)."
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>p</th><th>q</th><th>p ↔ q</th></tr></thead>
+            <tbody>
+              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
+              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card full-width">
+        <div class="card-title">Master Truth Table Comparison</div>
+        <div class="description">Overview comparing all operators across each input pair.</div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>p</th>
+                <th>q</th>
+                <th>p ∧ q</th>
+                <th>p ∨ q</th>
+                <th>¬p</th>
+                <th>p ⊕ q</th>
+                <th>p → q</th>
+                <th>p ↔ q</th>
+                <th>Tautology</th>
+                <th>Contradiction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-p="true" data-q="true">
+                <td>T</td><td>T</td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+              </tr>
+              <tr data-p="true" data-q="false">
+                <td>T</td><td>F</td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+              </tr>
+              <tr data-p="false" data-q="true">
+                <td>F</td><td>T</td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+              </tr>
+              <tr data-p="false" data-q="false">
+                <td>F</td><td>F</td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
+                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="grid">
-
-    <!-- Order of Precedence Card -->
-    <div class="card full-width">
-      <div class="card-title">Order of Precedence (Evaluation Order)</div>
-      <div class="description">When combining multiple logical operators without parentheses, expressions are evaluated from highest precedence to lowest.</div>
-      <div class="table-responsive">
-        <table class="precedence-table">
-          <thead>
-            <tr>
-              <th style="width: 80px; text-align: center;">Priority</th>
-              <th>Operator Name</th>
-              <th style="text-align: center;">Symbol</th>
-              <th>Rule / Note</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;"><span class="rank-badge">1</span></td>
-              <td><strong>Parentheses</strong></td>
-              <td style="text-align: center;"><span class="symbol">( )</span></td>
-              <td>Always evaluated first; overrides default precedence order.</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;"><span class="rank-badge">2</span></td>
-              <td><strong>Negation (NOT)</strong></td>
-              <td style="text-align: center;"><span class="symbol">¬, ~</span></td>
-              <td>Highest operator precedence; applies directly to the target statement.</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;"><span class="rank-badge">3</span></td>
-              <td><strong>Conjunction (AND)</strong></td>
-              <td style="text-align: center;"><span class="symbol">∧, &</span></td>
-              <td>Evaluated before OR, XOR, Conditional, or Biconditional operators.</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;"><span class="rank-badge">4</span></td>
-              <td><strong>Disjunction (OR) & XOR</strong></td>
-              <td style="text-align: center;"><span class="symbol">∨, ⊕</span></td>
-              <td>Evaluated after AND, but before implication operators.</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;"><span class="rank-badge">5</span></td>
-              <td><strong>Conditional (IF...THEN)</strong></td>
-              <td style="text-align: center;"><span class="symbol">→</span></td>
-              <td>Evaluated after standard logical connectives.</td>
-            </tr>
-            <tr>
-              <td style="text-align: center;"><span class="rank-badge">6</span></td>
-              <td><strong>Biconditional (IFF)</strong></td>
-              <td style="text-align: center;"><span class="symbol">↔</span></td>
-              <td>Lowest operator precedence; evaluated last.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div id="tab-quiz" class="tab-content">
+    
+    <div class="scoreboard">
+      <span>Score: <span id="score" class="score-num">0</span> / <span id="total-q">0</span></span>
+      <button class="btn-reset" onclick="resetQuiz()">Restart Quiz</button>
     </div>
 
-    <!-- Conjunction (AND) -->
-    <div class="card">
-      <div class="card-title">Conjunction (AND) <span class="symbol">p ∧ q</span></div>
-      <div class="description">True only when <strong>both</strong> inputs are True.</div>
-      <div class="example-box">
-        <strong>Example:</strong> "It is raining (p) <em>AND</em> it is daytime (q)."
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead><tr><th>p</th><th>q</th><th>p ∧ q</th></tr></thead>
-          <tbody>
-            <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Disjunction (OR) -->
-    <div class="card">
-      <div class="card-title">Disjunction (OR) <span class="symbol">p ∨ q</span></div>
-      <div class="description">True if <strong>at least one</strong> input is True.</div>
-      <div class="example-box">
-        <strong>Example:</strong> "It is raining (p) <em>OR</em> it is daytime (q)."
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead><tr><th>p</th><th>q</th><th>p ∨ q</th></tr></thead>
-          <tbody>
-            <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Negation (NOT) -->
-    <div class="card">
-      <div class="card-title">Negation (NOT) <span class="symbol">¬p</span></div>
-      <div class="description">Inverts the truth value of proposition <strong>p</strong>.</div>
-      <div class="example-box">
-        <strong>Example:</strong> "It is <em>NOT</em> raining (p)."
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead><tr><th>p</th><th>¬p</th></tr></thead>
-          <tbody>
-            <tr data-p="true"><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            <tr data-p="false"><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Exclusive OR (XOR) -->
-    <div class="card">
-      <div class="card-title">Exclusive OR (XOR) <span class="symbol">p ⊕ q</span></div>
-      <div class="description">True if p or q is True, <strong>but not both</strong>.</div>
-      <div class="example-box">
-        <strong>Example:</strong> "It is raining (p) or snowing (q), <em>but not both</em>."
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead><tr><th>p</th><th>q</th><th>p ⊕ q</th></tr></thead>
-          <tbody>
-            <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Conditional (IF...THEN) -->
-    <div class="card">
-      <div class="card-title">Conditional (IF...THEN) <span class="symbol">p → q</span></div>
-      <div class="description">False <strong>only</strong> when p is True and q is False.</div>
-      <div class="example-box">
-        <strong>Example:</strong> "<em>IF</em> you are late (p), <em>THEN</em> you are fired (q)."
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead><tr><th>p</th><th>q</th><th>p → q</th></tr></thead>
-          <tbody>
-            <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Biconditional (IFF) -->
-    <div class="card">
-      <div class="card-title">Biconditional (IFF) <span class="symbol">p ↔ q</span></div>
-      <div class="description">True only when p and q share the <strong>same value</strong>.</div>
-      <div class="example-box">
-        <strong>Example:</strong> "The switch is ON (p) <em>IF AND ONLY IF</em> the bulb is glowing (q)."
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead><tr><th>p</th><th>q</th><th>p ↔ q</th></tr></thead>
-          <tbody>
-            <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Master Table -->
-    <div class="card full-width">
-      <div class="card-title">Master Truth Table Comparison</div>
-      <div class="description">Overview comparing all operators across each input pair.</div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>p</th>
-              <th>q</th>
-              <th>p ∧ q</th>
-              <th>p ∨ q</th>
-              <th>¬p</th>
-              <th>p ⊕ q</th>
-              <th>p → q</th>
-              <th>p ↔ q</th>
-              <th>Tautology</th>
-              <th>Contradiction</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-p="true" data-q="true">
-              <td>T</td><td>T</td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-            </tr>
-            <tr data-p="true" data-q="false">
-              <td>T</td><td>F</td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-            </tr>
-            <tr data-p="false" data-q="true">
-              <td>F</td><td>T</td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-            </tr>
-            <tr data-p="false" data-q="false">
-              <td>F</td><td>F</td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-              <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div id="quiz-container">
+      <!-- Injected dynamically by JavaScript -->
     </div>
 
   </div>
 
   <script>
+    /* Tab Navigation Functions */
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      document.getElementById(`tab-btn-${tabName}`).classList.add('active');
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+
+    /* Truth Table Interactive State */
     const state = { p: true, q: true };
 
     function toggleReveal(cell) {
@@ -632,8 +820,128 @@
       });
     }
 
-    // Initial evaluation
+    /* Interactive Quiz System */
+    const questions = [
+      {
+        q: "Which logical operator evaluates to True ONLY when both inputs (p and q) are True?",
+        options: [
+          "Disjunction (p ∨ q)",
+          "Conjunction (p ∧ q)",
+          "Exclusive OR (p ⊕ q)",
+          "Conditional (p → q)"
+        ],
+        answer: 1,
+        explanation: "Conjunction (AND) requires both p AND q to be True simultaneously."
+      },
+      {
+        q: "Consider the conditional statement: 'If you are late (p), then you are fired (q).' In which situation is this statement FALSE?",
+        options: [
+          "You are late (p=T) and you are fired (q=T).",
+          "You are late (p=T) and you are NOT fired (q=F).",
+          "You are NOT late (p=F) and you are fired (q=T).",
+          "You are NOT late (p=F) and you are NOT fired (q=F)."
+        ],
+        answer: 1,
+        explanation: "A conditional statement (p → q) is broken only when the condition occurs (p=T) but the promised outcome does not happen (q=F)."
+      },
+      {
+        q: "The biconditional statement 'p ↔ q' (p if and only if q) is True under which condition?",
+        options: [
+          "Only when p is True and q is False.",
+          "Only when p is False and q is True.",
+          "Whenever p and q have the exact same truth value.",
+          "Whenever at least one input is True."
+        ],
+        answer: 2,
+        explanation: "A biconditional (IFF) acts as a strict equality test: it is True when both inputs are True, or both inputs are False."
+      },
+      {
+        q: "Evaluate the compound expression: (p ∨ q) ∧ ¬p, given p = False and q = True.",
+        options: [
+          "True",
+          "False"
+        ],
+        answer: 0,
+        explanation: "First, (False ∨ True) = True. Second, ¬False = True. Finally, True ∧ True = True."
+      },
+      {
+        q: "According to the Order of Precedence, which operator is evaluated FIRST in an unparenthesized expression?",
+        options: [
+          "Conjunction (AND)",
+          "Conditional (IF...THEN)",
+          "Negation (NOT)",
+          "Disjunction (OR)"
+        ],
+        answer: 2,
+        explanation: "Negation (NOT) has the highest priority among single/binary operators and is evaluated before AND, OR, or Conditional statements."
+      }
+    ];
+
+    let currentScore = 0;
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      document.getElementById('total-q').textContent = questions.length;
+      container.innerHTML = '';
+
+      questions.forEach((qObj, index) => {
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+
+        let optionsHTML = '';
+        qObj.options.forEach((opt, optIdx) => {
+          optionsHTML += `
+            <button class="option-btn" onclick="checkAnswer(${index}, ${optIdx})">
+              ${opt}
+            </button>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="q-number">Question ${index + 1} of ${questions.length}</div>
+          <div class="q-text">${qObj.q}</div>
+          <div class="options-grid" id="options-${index}">
+            ${optionsHTML}
+          </div>
+          <div class="feedback" id="feedback-${index}"></div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function checkAnswer(qIdx, selectedIdx) {
+      const qObj = questions[qIdx];
+      const optionsContainer = document.getElementById(`options-${qIdx}`);
+      const buttons = optionsContainer.querySelectorAll('.option-btn');
+      const feedback = document.getElementById(`feedback-${qIdx}`);
+
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selectedIdx === qObj.answer) {
+        buttons[selectedIdx].classList.add('correct');
+        feedback.className = 'feedback show correct-fb';
+        feedback.innerHTML = `<strong>Correct!</strong> ${qObj.explanation}`;
+        currentScore++;
+      } else {
+        buttons[selectedIdx].classList.add('wrong');
+        buttons[qObj.answer].classList.add('correct');
+        feedback.className = 'feedback show wrong-fb';
+        feedback.innerHTML = `<strong>Incorrect.</strong> ${qObj.explanation}`;
+      }
+
+      document.getElementById('score').textContent = currentScore;
+    }
+
+    function resetQuiz() {
+      currentScore = 0;
+      document.getElementById('score').textContent = '0';
+      renderQuiz();
+    }
+
+    // Initial setup
     updateHighlights();
+    renderQuiz();
   </script>
 
 </body>
