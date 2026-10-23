@@ -1,786 +1,950 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boolean Operators Study Guide & Interactive Quiz</title>
+  <title>Boolean Operators Study Guide</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome v6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind Custom Config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              900: '#312e81',
+            },
+            cyanAccent: {
+              400: '#22d3ee',
+              500: '#06b6d4',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --border: #334155;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --true-bg: #064e3b;
-      --true-text: #4ade80;
-      --true-border: #15803d;
-      --false-bg: #7f1d1d;
-      --false-text: #fca5a5;
-      --false-border: #b91c1c;
-      --highlight: #1e3a8a;
-      --correct-bg: #064e3b;
-      --correct-text: #4ade80;
-      --correct-border: #15803d;
-      --wrong-bg: #7f1d1d;
-      --wrong-text: #fca5a5;
-      --wrong-border: #b91c1c;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    /* Base Body & Ambient Glows */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding: 1rem;
-      max-width: 1200px;
-      margin: 0 auto;
+      background-color: #070b12;
+      color: #cbd5e1;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 0.25rem;
-      font-size: 1.75rem;
+    .ambient-glow-1 {
+      position: fixed;
+      top: -10%;
+      left: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    p.subtitle {
-      text-align: center;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
+    .ambient-glow-2 {
+      position: fixed;
+      top: -5%;
+      right: -10%;
+      width: 45vw;
+      height: 45vw;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .nav-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+    .ambient-glow-3 {
+      position: fixed;
+      bottom: -10%;
+      left: 30%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .tab-btn {
-      padding: 0.6rem 1.25rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      border-radius: 8px;
-      cursor: pointer;
-      color: var(--muted);
-      transition: all 0.2s ease;
+    /* Glassmorphic Surfaces */
+    .glass-card {
+      background: rgba(18, 24, 38, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
-    .tab-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-card-hover:hover {
+      border-color: rgba(129, 140, 248, 0.3);
+      box-shadow: 0 12px 40px -10px rgba(99, 102, 241, 0.25);
+      transform: translateY(-2px);
     }
 
-    .tab-content {
-      display: none;
+    /* Glow Effects */
+    .glow-brand {
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
     }
 
-    .tab-content.active {
-      display: block;
-    }
-
-    .global-controls {
-      background: var(--card-bg);
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .toggles-wrapper {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .toggle-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .actions-wrapper {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-
-    .btn-toggle {
-      padding: 0.5rem 1.25rem;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.2s ease;
-      min-width: 48px;
-      min-height: 44px;
-    }
-
-    .btn-true {
-      background-color: var(--true-bg);
-      color: var(--true-text);
-      border-color: var(--true-border);
-    }
-
-    .btn-false {
-      background-color: var(--false-bg);
-      color: var(--false-text);
-      border-color: var(--false-border);
-    }
-
-    .btn-action {
-      padding: 0.5rem 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      min-height: 40px;
-      flex: 1;
-      max-width: 140px;
-    }
-
-    .btn-action:hover {
-      background-color: var(--primary-hover);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 10px;
-      padding: 1.25rem;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card-title {
-      font-size: 1.05rem;
+    /* Active Highlight Row for Interactive Logic Tables */
+    tr.active-eval-row {
+      background: rgba(99, 102, 241, 0.25) !important;
+      border-left: 3px solid #818cf8;
       font-weight: 700;
-      margin-top: 0;
-      margin-bottom: 0.35rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
     }
 
-    .symbol {
-      color: var(--primary);
-      font-family: monospace;
-      font-size: 1rem;
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
       background: #0f172a;
-      padding: 0.15rem 0.5rem;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
       border-radius: 4px;
-      border: 1px solid var(--border);
     }
-
-    .description {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .example-box {
-      background-color: #0f172a;
-      border-left: 3px solid var(--primary);
-      padding: 0.5rem 0.75rem;
-      border-radius: 0 4px 4px 0;
-      font-size: 0.825rem;
-      color: #cbd5e1;
-      margin-bottom: 1rem;
-      border-top: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .precedence-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.875rem;
-    }
-
-    .precedence-table th {
-      background-color: #0f172a;
-      color: #cbd5e1;
-      font-weight: 600;
-      padding: 0.6rem;
-      border: 1px solid var(--border);
-    }
-
-    .precedence-table td {
-      padding: 0.6rem;
-      border: 1px solid var(--border);
-    }
-
-    .rank-badge {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
-      text-align: center;
-      background-color: #0f172a;
-      color: var(--primary);
-      font-weight: bold;
-      border-radius: 50%;
-      font-size: 0.8rem;
-      border: 1px solid var(--border);
-    }
-
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      margin-top: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: center;
-      font-size: 0.875rem;
-      white-space: nowrap;
-    }
-
-    th, td {
-      padding: 0.6rem 0.4rem;
-      border: 1px solid var(--border);
-    }
-
-    th {
-      background-color: #0f172a;
-      color: #cbd5e1;
-      font-weight: 600;
-      font-size: 0.8rem;
-    }
-
-    tr.active-row {
-      background-color: var(--highlight) !important;
-      font-weight: bold;
-    }
-
-    .cell-reveal {
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      min-width: 65px;
-    }
-
-    .badge-hidden {
-      display: inline-block;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      background-color: #334155;
-      color: #94a3b8;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .badge-value {
-      display: none;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.85rem;
-    }
-
-    .revealed .badge-hidden {
-      display: none;
-    }
-
-    .revealed .badge-value {
-      display: inline-block;
-    }
-
-    .badge-t { background-color: var(--true-bg); color: var(--true-text); border: 1px solid var(--true-border); }
-    .badge-f { background-color: var(--false-bg); color: var(--false-text); border: 1px solid var(--false-border); }
-
-    .scoreboard {
-      background: var(--card-bg);
-      padding: 1rem;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      font-weight: 600;
-    }
-
-    .score-num {
-      color: var(--primary);
-      font-size: 1.25rem;
-    }
-
-    .btn-reset {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      background-color: var(--muted);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .quiz-card {
-      background: var(--card-bg);
-      border-radius: 10px;
-      padding: 1.25rem;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-      margin-bottom: 1.25rem;
-    }
-
-    .q-number {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.25rem;
-    }
-
-    .q-text {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .option-btn {
-      width: 100%;
-      text-align: left;
-      padding: 0.75rem 1rem;
-      font-size: 0.9rem;
-      background-color: #0f172a;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .option-btn:hover:not(:disabled) {
-      background-color: #334155;
-    }
-
-    .option-btn:disabled {
-      cursor: default;
-    }
-
-    .option-btn.correct {
-      background-color: var(--correct-bg) !important;
-      color: var(--correct-text) !important;
-      border-color: var(--correct-border) !important;
-      font-weight: 700;
-    }
-
-    .option-btn.wrong {
-      background-color: var(--wrong-bg) !important;
-      color: var(--wrong-text) !important;
-      border-color: var(--wrong-border) !important;
-    }
-
-    .feedback {
-      display: none;
-      margin-top: 1rem;
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-    }
-
-    .feedback.show {
-      display: block;
-    }
-
-    .feedback.correct-fb {
-      background-color: #064e3b;
-      border: 1px solid var(--correct-border);
-      color: var(--correct-text);
-    }
-
-    .feedback.wrong-fb {
-      background-color: #7f1d1d;
-      border: 1px solid var(--wrong-border);
-      color: var(--wrong-text);
-    }
-
-    @media (min-width: 640px) {
-      body { padding: 2rem; }
-      h1 { font-size: 2rem; }
-      p.subtitle { font-size: 1rem; }
-      
-      .global-controls {
-        flex-direction: row;
-        justify-content: space-between;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .card.full-width {
-        grid-column: 1 / -1;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen relative overflow-x-hidden antialiased selection:bg-brand-500 selection:text-white">
 
-  <h1>Boolean Operators</h1>
-  <p class="subtitle">Interactive Study Guide, Truth Tables & Self-Assessment Quizzes</p>
+  <!-- Ambient Glow Background Elements -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+  <div class="ambient-glow-3"></div>
 
-  <div class="nav-tabs">
-    <button id="tab-btn-tables" class="tab-btn active" onclick="switchTab('tables')">Truth Tables Reference</button>
-    <button id="tab-btn-quiz" class="tab-btn" onclick="switchTab('quiz')">Interactive Quiz</button>
+  <!-- Content Wrapper -->
+  <div class="relative z-10 flex flex-col min-h-screen">
+
+    <!-- Fixed Glass Header -->
+    <header class="border-b border-white/10 bg-slate-950/70 backdrop-blur-md sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-gradient-to-br from-brand-500 to-cyanAccent-500 rounded-xl text-white shadow-lg glow-brand">
+            <i class="fa-solid fa-microchip text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-lg sm:text-xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent leading-tight">
+              Boolean Operators
+            </h1>
+            <p class="text-xs text-cyanAccent-400 font-medium">Interactive Logic & Precedence Study Guide</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sticky Navigation Tab Bar -->
+    <nav class="sticky top-[64px] z-40 bg-slate-950/80 backdrop-blur-md border-b border-white/10 py-3">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 overflow-x-auto">
+        <div class="flex items-center gap-2">
+          <button id="tab-btn-tables" onclick="switchTab('tables')" 
+            class="tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-md glow-brand">
+            <i class="fa-solid fa-table-cells"></i>
+            Truth Tables Reference
+          </button>
+          
+          <button id="tab-btn-precedence" onclick="switchTab('precedence')" 
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
+            <i class="fa-solid fa-layer-group"></i>
+            Order of Precedence
+          </button>
+
+          <button id="tab-btn-quiz" onclick="switchTab('quiz')" 
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
+            <i class="fa-solid fa-graduation-cap"></i>
+            Interactive Assessment
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      <!-- TAB 1: TRUTH TABLES & OPERATORS -->
+      <section id="tab-tables" class="tab-content block space-y-8">
+        
+        <!-- Interactive Variable Evaluator Bar -->
+        <div class="glass-card p-6 border-brand-500/20">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-1 text-center md:text-left">
+              <h2 class="text-base font-bold text-white flex items-center justify-center md:justify-start gap-2">
+                <i class="fa-solid fa-sliders text-cyanAccent-400"></i>
+                Dynamic Input Evaluator
+              </h2>
+              <p class="text-xs text-slate-400">Toggle proposition states below to highlight active evaluation rows across all truth tables in real-time.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-6">
+              <!-- Proposition P Switch -->
+              <div class="flex items-center gap-3 bg-slate-950/80 px-4 py-2 rounded-xl border border-white/10">
+                <span class="font-mono text-sm font-bold text-brand-400">Proposition p:</span>
+                <button id="btn-p" onclick="toggleState('p')" class="w-12 h-10 rounded-lg font-mono font-bold text-sm bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 hover:scale-105 transition shadow-sm">
+                  T
+                </button>
+              </div>
+
+              <!-- Proposition Q Switch -->
+              <div class="flex items-center gap-3 bg-slate-950/80 px-4 py-2 rounded-xl border border-white/10">
+                <span class="font-mono text-sm font-bold text-cyanAccent-400">Proposition q:</span>
+                <button id="btn-q" onclick="toggleState('q')" class="w-12 h-10 rounded-lg font-mono font-bold text-sm bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 hover:scale-105 transition shadow-sm">
+                  T
+                </button>
+              </div>
+
+              <!-- Toggle Reveal All Button -->
+              <div class="flex items-center">
+                <button id="btn-toggle-all" onclick="toggleAllCells()" class="px-4 py-2 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 text-xs font-semibold hover:bg-brand-500/30 transition flex items-center gap-2">
+                  <i class="fa-solid fa-eye" id="toggle-all-icon"></i>
+                  <span id="toggle-all-text">Reveal All Cells</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 Primary Boolean Operators Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- Conjunction (AND) -->
+          <div class="glass-card glass-card-hover p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-indigo-500/20 text-brand-400 text-xs">
+                    <i class="fa-solid fa-circle-nodes"></i>
+                  </span>
+                  Conjunction
+                </h3>
+                <span class="font-mono text-xs px-2 py-1 rounded-md bg-slate-950 text-cyanAccent-400 border border-white/10 font-bold">p ∧ q</span>
+              </div>
+              <p class="text-xs text-slate-400 mb-3 leading-relaxed">True only when <strong>both</strong> inputs p and q are True.</p>
+
+              <!-- Example Box -->
+              <div class="bg-slate-950/80 p-3 rounded-xl border-l-2 border-brand-500 border-y border-r border-white/5 text-xs text-slate-300 font-sans italic mb-4">
+                <span class="text-brand-400 font-semibold not-italic">Example:</span> "It is raining (p) <em>AND</em> it is daytime (q)."
+              </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="overflow-hidden rounded-xl border border-white/10">
+              <table class="w-full text-center text-xs">
+                <thead class="bg-slate-950/90 text-slate-400 font-mono text-[11px] uppercase">
+                  <tr><th class="py-2 border-b border-white/10">p</th><th class="py-2 border-b border-white/10">q</th><th class="py-2 border-b border-white/10 text-brand-400">p ∧ q</th></tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 font-mono">
+                  <tr data-p="true" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="true" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Disjunction (OR) -->
+          <div class="glass-card glass-card-hover p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-cyanAccent-500/20 text-cyanAccent-400 text-xs">
+                    <i class="fa-solid fa-diagram-project"></i>
+                  </span>
+                  Disjunction
+                </h3>
+                <span class="font-mono text-xs px-2 py-1 rounded-md bg-slate-950 text-cyanAccent-400 border border-white/10 font-bold">p ∨ q</span>
+              </div>
+              <p class="text-xs text-slate-400 mb-3 leading-relaxed">True if <strong>at least one</strong> input is True.</p>
+
+              <!-- Example Box -->
+              <div class="bg-slate-950/80 p-3 rounded-xl border-l-2 border-cyanAccent-500 border-y border-r border-white/5 text-xs text-slate-300 font-sans italic mb-4">
+                <span class="text-cyanAccent-400 font-semibold not-italic">Example:</span> "It is raining (p) <em>OR</em> it is daytime (q)."
+              </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="overflow-hidden rounded-xl border border-white/10">
+              <table class="w-full text-center text-xs">
+                <thead class="bg-slate-950/90 text-slate-400 font-mono text-[11px] uppercase">
+                  <tr><th class="py-2 border-b border-white/10">p</th><th class="py-2 border-b border-white/10">q</th><th class="py-2 border-b border-white/10 text-cyanAccent-400">p ∨ q</th></tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 font-mono">
+                  <tr data-p="true" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="true" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Negation (NOT) -->
+          <div class="glass-card glass-card-hover p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-pink-500/20 text-pink-400 text-xs">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                  </span>
+                  Negation
+                </h3>
+                <span class="font-mono text-xs px-2 py-1 rounded-md bg-slate-950 text-pink-400 border border-white/10 font-bold">¬p</span>
+              </div>
+              <p class="text-xs text-slate-400 mb-3 leading-relaxed">Inverts the truth value of proposition <strong>p</strong>.</p>
+
+              <!-- Example Box -->
+              <div class="bg-slate-950/80 p-3 rounded-xl border-l-2 border-pink-500 border-y border-r border-white/5 text-xs text-slate-300 font-sans italic mb-4">
+                <span class="text-pink-400 font-semibold not-italic">Example:</span> "It is <em>NOT</em> raining (p)."
+              </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="overflow-hidden rounded-xl border border-white/10">
+              <table class="w-full text-center text-xs">
+                <thead class="bg-slate-950/90 text-slate-400 font-mono text-[11px] uppercase">
+                  <tr><th class="py-2 border-b border-white/10">p</th><th class="py-2 border-b border-white/10 text-pink-400">¬p</th></tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 font-mono">
+                  <tr data-p="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Exclusive OR (XOR) -->
+          <div class="glass-card glass-card-hover p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 text-xs">
+                    <i class="fa-solid fa-code-compare"></i>
+                  </span>
+                  Exclusive OR (XOR)
+                </h3>
+                <span class="font-mono text-xs px-2 py-1 rounded-md bg-slate-950 text-amber-400 border border-white/10 font-bold">p ⊕ q</span>
+              </div>
+              <p class="text-xs text-slate-400 mb-3 leading-relaxed">True if p or q is True, <strong>but not both</strong>.</p>
+
+              <!-- Example Box -->
+              <div class="bg-slate-950/80 p-3 rounded-xl border-l-2 border-amber-500 border-y border-r border-white/5 text-xs text-slate-300 font-sans italic mb-4">
+                <span class="text-amber-400 font-semibold not-italic">Example:</span> "It is raining (p) or snowing (q), <em>but not both</em>."
+              </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="overflow-hidden rounded-xl border border-white/10">
+              <table class="w-full text-center text-xs">
+                <thead class="bg-slate-950/90 text-slate-400 font-mono text-[11px] uppercase">
+                  <tr><th class="py-2 border-b border-white/10">p</th><th class="py-2 border-b border-white/10">q</th><th class="py-2 border-b border-white/10 text-amber-400">p ⊕ q</th></tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 font-mono">
+                  <tr data-p="true" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                  <tr data-p="true" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Conditional (IF...THEN) -->
+          <div class="glass-card glass-card-hover p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 text-xs">
+                    <i class="fa-solid fa-arrow-right-long"></i>
+                  </span>
+                  Conditional (If...Then)
+                </h3>
+                <span class="font-mono text-xs px-2 py-1 rounded-md bg-slate-950 text-emerald-400 border border-white/10 font-bold">p → q</span>
+              </div>
+              <p class="text-xs text-slate-400 mb-3 leading-relaxed">False <strong>only</strong> when antecedent p is True and consequent q is False.</p>
+
+              <!-- Example Box -->
+              <div class="bg-slate-950/80 p-3 rounded-xl border-l-2 border-emerald-500 border-y border-r border-white/5 text-xs text-slate-300 font-sans italic mb-4">
+                <span class="text-emerald-400 font-semibold not-italic">Example:</span> "<em>IF</em> you are late (p), <em>THEN</em> you are fired (q)."
+              </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="overflow-hidden rounded-xl border border-white/10">
+              <table class="w-full text-center text-xs">
+                <thead class="bg-slate-950/90 text-slate-400 font-mono text-[11px] uppercase">
+                  <tr><th class="py-2 border-b border-white/10">p</th><th class="py-2 border-b border-white/10">q</th><th class="py-2 border-b border-white/10 text-emerald-400">p → q</th></tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 font-mono">
+                  <tr data-p="true" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="true" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Biconditional (IFF) -->
+          <div class="glass-card glass-card-hover p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-purple-500/20 text-purple-400 text-xs">
+                    <i class="fa-solid fa-left-right"></i>
+                  </span>
+                  Biconditional (IFF)
+                </h3>
+                <span class="font-mono text-xs px-2 py-1 rounded-md bg-slate-950 text-purple-400 border border-white/10 font-bold">p ↔ q</span>
+              </div>
+              <p class="text-xs text-slate-400 mb-3 leading-relaxed">True only when p and q share the <strong>exact same</strong> truth value.</p>
+
+              <!-- Example Box -->
+              <div class="bg-slate-950/80 p-3 rounded-xl border-l-2 border-purple-500 border-y border-r border-white/5 text-xs text-slate-300 font-sans italic mb-4">
+                <span class="text-purple-400 font-semibold not-italic">Example:</span> "Switch ON (p) <em>IF AND ONLY IF</em> bulb glowing (q)."
+              </div>
+            </div>
+
+            <!-- Interactive Table -->
+            <div class="overflow-hidden rounded-xl border border-white/10">
+              <table class="w-full text-center text-xs">
+                <thead class="bg-slate-950/90 text-slate-400 font-mono text-[11px] uppercase">
+                  <tr><th class="py-2 border-b border-white/10">p</th><th class="py-2 border-b border-white/10">q</th><th class="py-2 border-b border-white/10 text-purple-400">p ↔ q</th></tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 font-mono">
+                  <tr data-p="true" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                  <tr data-p="true" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">T</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="true" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">T</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-500/40 font-bold">F</span>
+                    </td>
+                  </tr>
+                  <tr data-p="false" data-q="false" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2">F</td><td class="py-2">F</td>
+                    <td class="cell-reveal py-2 cursor-pointer" onclick="toggleReveal(this)">
+                      <span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span>
+                      <span class="badge-value hidden px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 font-bold">T</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Master Truth Table Comparison Section -->
+        <div class="glass-card p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-white flex items-center gap-3">
+                <span class="p-2 bg-brand-500/20 text-brand-400 rounded-lg text-sm">
+                  <i class="fa-solid fa-table-list"></i>
+                </span>
+                Master Truth Table Matrix Comparison
+              </h2>
+              <p class="text-xs text-slate-400 mt-1">Side-by-side logical comparison across all input combinations including Tautology & Contradiction.</p>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-white/10">
+            <table class="w-full text-center text-xs">
+              <thead class="bg-slate-950/90 text-slate-400 font-mono text-[11px] uppercase">
+                <tr>
+                  <th class="p-3 border-b border-white/10">p</th>
+                  <th class="p-3 border-b border-white/10">q</th>
+                  <th class="p-3 border-b border-white/10 text-brand-400">p ∧ q</th>
+                  <th class="p-3 border-b border-white/10 text-cyanAccent-400">p ∨ q</th>
+                  <th class="p-3 border-b border-white/10 text-pink-400">¬p</th>
+                  <th class="p-3 border-b border-white/10 text-amber-400">p ⊕ q</th>
+                  <th class="p-3 border-b border-white/10 text-emerald-400">p → q</th>
+                  <th class="p-3 border-b border-white/10 text-purple-400">p ↔ q</th>
+                  <th class="p-3 border-b border-white/10 text-blue-400">Tautology</th>
+                  <th class="p-3 border-b border-white/10 text-rose-400">Contradiction</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 font-mono">
+                <tr data-p="true" data-q="true" class="hover:bg-slate-800/40 transition">
+                  <td class="p-3">T</td><td class="p-3">T</td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                </tr>
+                <tr data-p="true" data-q="false" class="hover:bg-slate-800/40 transition">
+                  <td class="p-3">T</td><td class="p-3">F</td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                </tr>
+                <tr data-p="false" data-q="true" class="hover:bg-slate-800/40 transition">
+                  <td class="p-3">F</td><td class="p-3">T</td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                </tr>
+                <tr data-p="false" data-q="false" class="hover:bg-slate-800/40 transition">
+                  <td class="p-3">F</td><td class="p-3">F</td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-emerald-400 font-bold">T</span></td>
+                  <td class="cell-reveal p-3 cursor-pointer" onclick="toggleReveal(this)"><span class="badge-hidden px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[10px]">Reveal</span><span class="badge-value hidden text-rose-400 font-bold">F</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ORDER OF PRECEDENCE -->
+      <section id="tab-precedence" class="tab-content hidden space-y-8">
+        
+        <div class="glass-card p-6 space-y-6">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div>
+              <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                <span class="p-2 bg-brand-500/20 text-brand-400 rounded-lg">
+                  <i class="fa-solid fa-layer-group"></i>
+                </span>
+                Order of Precedence (Evaluation Priority)
+              </h2>
+              <p class="text-sm text-slate-400 mt-1">When combining logical operators without parentheses, compound expressions strictly evaluate from highest precedence to lowest.</p>
+            </div>
+          </div>
+
+          <!-- Precedence Sequence Vector Visual Diagram -->
+          <div class="bg-slate-950/80 p-6 rounded-2xl border border-white/5 space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-cyanAccent-400 flex items-center gap-2">
+              <i class="fa-solid fa-sitemap"></i> Precedence Evaluation Pipeline Architecture
+            </h3>
+
+            <!-- SVG Precedence Architecture Diagram -->
+            <div class="w-full overflow-x-auto py-2">
+              <svg viewBox="0 0 800 160" class="w-full min-w-[700px] h-auto font-sans">
+                <!-- Step 1: Parentheses -->
+                <g transform="translate(10, 20)">
+                  <rect x="0" y="0" width="110" height="110" rx="12" fill="#0f172a" stroke="#6366f1" stroke-width="2" />
+                  <circle cx="55" cy="30" r="16" fill="#312e81" />
+                  <text x="55" y="35" text-anchor="middle" fill="#818cf8" font-weight="bold" font-size="14">1</text>
+                  <text x="55" y="68" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">( ) Grouping</text>
+                  <text x="55" y="88" text-anchor="middle" fill="#94a3b8" font-size="10">Parentheses</text>
+                </g>
+
+                <path d="M 125 75 L 145 75" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+                <!-- Step 2: NOT -->
+                <g transform="translate(150, 20)">
+                  <rect x="0" y="0" width="110" height="110" rx="12" fill="#0f172a" stroke="#ec4899" stroke-width="2" />
+                  <circle cx="55" cy="30" r="16" fill="#831843" />
+                  <text x="55" y="35" text-anchor="middle" fill="#f472b6" font-weight="bold" font-size="14">2</text>
+                  <text x="55" y="68" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">¬ , ~ NOT</text>
+                  <text x="55" y="88" text-anchor="middle" fill="#94a3b8" font-size="10">Negation</text>
+                </g>
+
+                <path d="M 265 75 L 285 75" stroke="#475569" stroke-width="2" />
+
+                <!-- Step 3: AND -->
+                <g transform="translate(290, 20)">
+                  <rect x="0" y="0" width="110" height="110" rx="12" fill="#0f172a" stroke="#06b6d4" stroke-width="2" />
+                  <circle cx="55" cy="30" r="16" fill="#155e75" />
+                  <text x="55" y="35" text-anchor="middle" fill="#22d3ee" font-weight="bold" font-size="14">3</text>
+                  <text x="55" y="68" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">∧ AND</text>
+                  <text x="55" y="88" text-anchor="middle" fill="#94a3b8" font-size="10">Conjunction</text>
+                </g>
+
+                <path d="M 405 75 L 425 75" stroke="#475569" stroke-width="2" />
+
+                <!-- Step 4: OR / XOR -->
+                <g transform="translate(430, 20)">
+                  <rect x="0" y="0" width="110" height="110" rx="12" fill="#0f172a" stroke="#f59e0b" stroke-width="2" />
+                  <circle cx="55" cy="30" r="16" fill="#78350f" />
+                  <text x="55" y="35" text-anchor="middle" fill="#fbbf24" font-weight="bold" font-size="14">4</text>
+                  <text x="55" y="68" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">∨ , ⊕ OR/XOR</text>
+                  <text x="55" y="88" text-anchor="middle" fill="#94a3b8" font-size="10">Disjunction</text>
+                </g>
+
+                <path d="M 545 75 L 565 75" stroke="#475569" stroke-width="2" />
+
+                <!-- Step 5: Conditional -->
+                <g transform="translate(570, 20)">
+                  <rect x="0" y="0" width="110" height="110" rx="12" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+                  <circle cx="55" cy="30" r="16" fill="#064e3b" />
+                  <text x="55" y="35" text-anchor="middle" fill="#34d399" font-weight="bold" font-size="14">5</text>
+                  <text x="55" y="68" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">→ IF...THEN</text>
+                  <text x="55" y="88" text-anchor="middle" fill="#94a3b8" font-size="10">Conditional</text>
+                </g>
+
+                <path d="M 685 75 L 705 75" stroke="#475569" stroke-width="2" />
+
+                <!-- Step 6: Biconditional -->
+                <g transform="translate(710, 20)">
+                  <rect x="0" y="0" width="80" height="110" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="2" />
+                  <circle cx="40" cy="30" r="16" fill="#581c87" />
+                  <text x="40" y="35" text-anchor="middle" fill="#c084fc" font-weight="bold" font-size="14">6</text>
+                  <text x="40" y="68" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">↔ IFF</text>
+                  <text x="40" y="88" text-anchor="middle" fill="#94a3b8" font-size="10">Biconditional</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Structured Precedence Table -->
+          <div class="overflow-x-auto rounded-xl border border-white/10">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-slate-950/90 text-slate-400 font-mono text-xs uppercase">
+                <tr>
+                  <th class="p-3 text-center w-20">Priority</th>
+                  <th class="p-3">Operator Name</th>
+                  <th class="p-3 text-center">Symbol</th>
+                  <th class="p-3">Rule / Note</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <tr class="hover:bg-slate-800/30 transition">
+                  <td class="p-3 text-center"><span class="w-7 h-7 inline-flex items-center justify-center rounded-full bg-brand-500/20 text-brand-400 font-bold font-mono">1</span></td>
+                  <td class="p-3 font-semibold text-white">Parentheses</td>
+                  <td class="p-3 text-center font-mono text-cyanAccent-400 font-bold">( )</td>
+                  <td class="p-3 text-slate-300">Always evaluated first; explicitly overrides standard operator precedence order.</td>
+                </tr>
+                <tr class="hover:bg-slate-800/30 transition">
+                  <td class="p-3 text-center"><span class="w-7 h-7 inline-flex items-center justify-center rounded-full bg-pink-500/20 text-pink-400 font-bold font-mono">2</span></td>
+                  <td class="p-3 font-semibold text-white">Negation (NOT)</td>
+                  <td class="p-3 text-center font-mono text-pink-400 font-bold">¬, ~</td>
+                  <td class="p-3 text-slate-300">Highest operator priority; applies directly to the immediate adjacent target statement.</td>
+                </tr>
+                <tr class="hover:bg-slate-800/30 transition">
+                  <td class="p-3 text-center"><span class="w-7 h-7 inline-flex items-center justify-center rounded-full bg-cyanAccent-500/20 text-cyanAccent-400 font-bold font-mono">3</span></td>
+                  <td class="p-3 font-semibold text-white">Conjunction (AND)</td>
+                  <td class="p-3 text-center font-mono text-cyanAccent-400 font-bold">∧, &amp;</td>
+                  <td class="p-3 text-slate-300">Evaluated strictly before OR, XOR, Conditional, or Biconditional operators.</td>
+                </tr>
+                <tr class="hover:bg-slate-800/30 transition">
+                  <td class="p-3 text-center"><span class="w-7 h-7 inline-flex items-center justify-center rounded-full bg-amber-500/20 text-amber-400 font-bold font-mono">4</span></td>
+                  <td class="p-3 font-semibold text-white">Disjunction (OR) &amp; XOR</td>
+                  <td class="p-3 text-center font-mono text-amber-400 font-bold">∨, ⊕</td>
+                  <td class="p-3 text-slate-300">Evaluated after AND, but takes priority over implication / conditional operators.</td>
+                </tr>
+                <tr class="hover:bg-slate-800/30 transition">
+                  <td class="p-3 text-center"><span class="w-7 h-7 inline-flex items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-bold font-mono">5</span></td>
+                  <td class="p-3 font-semibold text-white">Conditional (IF...THEN)</td>
+                  <td class="p-3 text-center font-mono text-emerald-400 font-bold">→</td>
+                  <td class="p-3 text-slate-300">Evaluated after standard logical connectives.</td>
+                </tr>
+                <tr class="hover:bg-slate-800/30 transition">
+                  <td class="p-3 text-center"><span class="w-7 h-7 inline-flex items-center justify-center rounded-full bg-purple-500/20 text-purple-400 font-bold font-mono">6</span></td>
+                  <td class="p-3 font-semibold text-white">Biconditional (IFF)</td>
+                  <td class="p-3 text-center font-mono text-purple-400 font-bold">↔</td>
+                  <td class="p-3 text-slate-300">Lowest operator precedence; evaluated last in unparenthesized expressions.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Step-by-Step Expression Reduction Breakdown -->
+          <div class="space-y-3 pt-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-brand-400"></i>
+              Worked Expression Evaluation Trace
+            </h3>
+            
+            <div class="bg-slate-950/80 p-5 rounded-2xl space-y-3 font-mono text-xs sm:text-sm border border-white/5">
+              <p class="text-slate-400 font-sans text-xs">Evaluate expression: <code class="text-cyanAccent-400 font-bold bg-slate-900 px-2 py-0.5 rounded">(p ∨ q) ∧ ¬p</code> given <code class="text-emerald-400">p = False</code>, <code class="text-emerald-400">q = True</code>:</p>
+              
+              <div class="flex items-center gap-3">
+                <span class="w-12 text-xs text-slate-500 font-sans">Step 1</span>
+                <span class="text-slate-300">Evaluate Parentheses: <span class="bg-brand-950/60 text-brand-400 px-2 py-0.5 rounded border border-brand-500/30">(False ∨ True) = True</span></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="w-12 text-xs text-slate-500 font-sans">Step 2</span>
+                <span class="text-slate-300">Evaluate Negation: <span class="bg-pink-950/60 text-pink-400 px-2 py-0.5 rounded border border-pink-500/30">¬False = True</span></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="w-12 text-xs text-slate-500 font-sans">Step 3</span>
+                <span class="text-slate-300">Evaluate Conjunction: <span class="bg-emerald-950/60 text-emerald-400 font-bold px-2 py-0.5 rounded border border-emerald-500/30">True ∧ True = True</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 3: INTERACTIVE QUIZ ASSESSMENT -->
+      <section id="tab-quiz" class="tab-content hidden space-y-6">
+        
+        <!-- Quiz Score Header -->
+        <div class="glass-card p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-brand-500/20">
+          <div class="flex items-center gap-4">
+            <div class="p-3 bg-brand-500/20 text-brand-400 rounded-xl text-xl">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold text-white">Knowledge Check Quiz</h2>
+              <p class="text-xs text-slate-400">Test your mastery of Boolean operators and operator precedence rules.</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-6 bg-slate-950/80 px-5 py-3 rounded-2xl border border-white/10">
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block font-medium">Current Score</span>
+              <span class="font-mono text-xl font-bold text-brand-400"><span id="score">0</span> / <span id="total-q">5</span></span>
+            </div>
+            <button onclick="resetQuiz()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-white/10 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate-right text-cyanAccent-400"></i> Restart
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="space-y-6">
+          <!-- Injected Dynamically by JS -->
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-slate-950/80 backdrop-blur-md py-6 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4">
+        Boolean Operators Interactive Study Guide • Rendered with Glassmorphic Interactive Design System
+      </div>
+    </footer>
+
   </div>
 
-  <div id="tab-tables" class="tab-content active">
-    
-    <div class="global-controls">
-      <div class="toggles-wrapper">
-        <div class="toggle-group">
-          <span>p:</span>
-          <button id="btn-p" class="btn-toggle btn-true" onclick="toggleState('p')">T</button>
-        </div>
-        <div class="toggle-group">
-          <span>q:</span>
-          <button id="btn-q" class="btn-toggle btn-true" onclick="toggleState('q')">T</button>
-        </div>
-      </div>
-      <div class="actions-wrapper">
-        <button class="btn-action" onclick="revealAll()">Reveal All</button>
-        <button class="btn-action" style="background-color: #475569;" onclick="hideAll()">Hide All</button>
-      </div>
-    </div>
-
-    <div class="grid">
-
-      <!-- Order of Precedence Card -->
-      <div class="card full-width">
-        <div class="card-title">Order of Precedence (Evaluation Order)</div>
-        <div class="description">When combining multiple logical operators without parentheses, expressions are evaluated from highest precedence to lowest.</div>
-        <div class="table-responsive">
-          <table class="precedence-table">
-            <thead>
-              <tr>
-                <th style="width: 80px; text-align: center;">Priority</th>
-                <th>Operator Name</th>
-                <th style="text-align: center;">Symbol</th>
-                <th>Rule / Note</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="text-align: center;"><span class="rank-badge">1</span></td>
-                <td><strong>Parentheses</strong></td>
-                <td style="text-align: center;"><span class="symbol">( )</span></td>
-                <td>Always evaluated first; overrides default precedence order.</td>
-              </tr>
-              <tr>
-                <td style="text-align: center;"><span class="rank-badge">2</span></td>
-                <td><strong>Negation (NOT)</strong></td>
-                <td style="text-align: center;"><span class="symbol">¬, ~</span></td>
-                <td>Highest operator precedence; applies directly to the target statement.</td>
-              </tr>
-              <tr>
-                <td style="text-align: center;"><span class="rank-badge">3</span></td>
-                <td><strong>Conjunction (AND)</strong></td>
-                <td style="text-align: center;"><span class="symbol">∧, &</span></td>
-                <td>Evaluated before OR, XOR, Conditional, or Biconditional operators.</td>
-              </tr>
-              <tr>
-                <td style="text-align: center;"><span class="rank-badge">4</span></td>
-                <td><strong>Disjunction (OR) & XOR</strong></td>
-                <td style="text-align: center;"><span class="symbol">∨, ⊕</span></td>
-                <td>Evaluated after AND, but before implication operators.</td>
-              </tr>
-              <tr>
-                <td style="text-align: center;"><span class="rank-badge">5</span></td>
-                <td><strong>Conditional (IF...THEN)</strong></td>
-                <td style="text-align: center;"><span class="symbol">→</span></td>
-                <td>Evaluated after standard logical connectives.</td>
-              </tr>
-              <tr>
-                <td style="text-align: center;"><span class="rank-badge">6</span></td>
-                <td><strong>Biconditional (IFF)</strong></td>
-                <td style="text-align: center;"><span class="symbol">↔</span></td>
-                <td>Lowest operator precedence; evaluated last.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Conjunction (AND) -->
-      <div class="card">
-        <div class="card-title">Conjunction (AND) <span class="symbol">p ∧ q</span></div>
-        <div class="description">True only when <strong>both</strong> inputs are True.</div>
-        <div class="example-box">
-          <strong>Example:</strong> "It is raining (p) <em>AND</em> it is daytime (q)."
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead><tr><th>p</th><th>q</th><th>p ∧ q</th></tr></thead>
-            <tbody>
-              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Disjunction (OR) -->
-      <div class="card">
-        <div class="card-title">Disjunction (OR) <span class="symbol">p ∨ q</span></div>
-        <div class="description">True if <strong>at least one</strong> input is True.</div>
-        <div class="example-box">
-          <strong>Example:</strong> "It is raining (p) <em>OR</em> it is daytime (q)."
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead><tr><th>p</th><th>q</th><th>p ∨ q</th></tr></thead>
-            <tbody>
-              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Negation (NOT) -->
-      <div class="card">
-        <div class="card-title">Negation (NOT) <span class="symbol">¬p</span></div>
-        <div class="description">Inverts the truth value of proposition <strong>p</strong>.</div>
-        <div class="example-box">
-          <strong>Example:</strong> "It is <em>NOT</em> raining (p)."
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead><tr><th>p</th><th>¬p</th></tr></thead>
-            <tbody>
-              <tr data-p="true"><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-              <tr data-p="false"><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Exclusive OR (XOR) -->
-      <div class="card">
-        <div class="card-title">Exclusive OR (XOR) <span class="symbol">p ⊕ q</span></div>
-        <div class="description">True if p or q is True, <strong>but not both</strong>.</div>
-        <div class="example-box">
-          <strong>Example:</strong> "It is raining (p) or snowing (q), <em>but not both</em>."
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead><tr><th>p</th><th>q</th><th>p ⊕ q</th></tr></thead>
-            <tbody>
-              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Conditional (IF...THEN) -->
-      <div class="card">
-        <div class="card-title">Conditional (IF...THEN) <span class="symbol">p → q</span></div>
-        <div class="description">False <strong>only</strong> when p is True and q is False.</div>
-        <div class="example-box">
-          <strong>Example:</strong> "<em>IF</em> you are late (p), <em>THEN</em> you are fired (q)."
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead><tr><th>p</th><th>q</th><th>p → q</th></tr></thead>
-            <tbody>
-              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Biconditional (IFF) -->
-      <div class="card">
-        <div class="card-title">Biconditional (IFF) <span class="symbol">p ↔ q</span></div>
-        <div class="description">True only when p and q share the <strong>same value</strong>.</div>
-        <div class="example-box">
-          <strong>Example:</strong> "The switch is ON (p) <em>IF AND ONLY IF</em> the bulb is glowing (q)."
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead><tr><th>p</th><th>q</th><th>p ↔ q</th></tr></thead>
-            <tbody>
-              <tr data-p="true" data-q="true"><td>T</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-              <tr data-p="true" data-q="false"><td>T</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-              <tr data-p="false" data-q="true"><td>F</td><td>T</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td></tr>
-              <tr data-p="false" data-q="false"><td>F</td><td>F</td><td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="card full-width">
-        <div class="card-title">Master Truth Table Comparison</div>
-        <div class="description">Overview comparing all operators across each input pair.</div>
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>p</th>
-                <th>q</th>
-                <th>p ∧ q</th>
-                <th>p ∨ q</th>
-                <th>¬p</th>
-                <th>p ⊕ q</th>
-                <th>p → q</th>
-                <th>p ↔ q</th>
-                <th>Tautology</th>
-                <th>Contradiction</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-p="true" data-q="true">
-                <td>T</td><td>T</td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              </tr>
-              <tr data-p="true" data-q="false">
-                <td>T</td><td>F</td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              </tr>
-              <tr data-p="false" data-q="true">
-                <td>F</td><td>T</td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              </tr>
-              <tr data-p="false" data-q="false">
-                <td>F</td><td>F</td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-t">T</span></td>
-                <td class="cell-reveal" onclick="toggleReveal(this)"><span class="badge-hidden">Reveal</span><span class="badge-value badge-f">F</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div id="tab-quiz" class="tab-content">
-    
-    <div class="scoreboard">
-      <span>Score: <span id="score" class="score-num">0</span> / <span id="total-q">0</span></span>
-      <button class="btn-reset" onclick="resetQuiz()">Restart Quiz</button>
-    </div>
-
-    <div id="quiz-container">
-      <!-- Injected dynamically by JavaScript -->
-    </div>
-
-  </div>
-
+  <!-- JavaScript Logic -->
   <script>
-    /* Tab Navigation Functions */
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    /* -------------------------------------------------------------
+       Tab Switcher Logic
+    ------------------------------------------------------------- */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-gradient-to-r', 'from-brand-600', 'to-brand-500', 'text-white', 'shadow-md', 'glow-brand');
+        btn.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-800/50');
+      });
 
-      document.getElementById(`tab-btn-${tabName}`).classList.add('active');
-      document.getElementById(`tab-${tabName}`).classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-gradient-to-r', 'from-brand-600', 'to-brand-500', 'text-white', 'shadow-md', 'glow-brand');
+        activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-800/50');
+      }
+
+      const activeContent = document.getElementById(`tab-${tabId}`);
+      if (activeContent) {
+        activeContent.classList.remove('hidden');
+      }
     }
 
-    /* Truth Table Interactive State */
-    const state = { p: true, q: true };
+    /* -------------------------------------------------------------
+       Interactive Truth Table Logic State
+    ------------------------------------------------------------- */
+    const state = { p: true, q: true, allRevealed: false };
 
     function toggleReveal(cell) {
-      cell.classList.toggle('revealed');
+      const hiddenBadge = cell.querySelector('.badge-hidden');
+      const valueBadge = cell.querySelector('.badge-value');
+      
+      if (hiddenBadge && valueBadge) {
+        hiddenBadge.classList.toggle('hidden');
+        valueBadge.classList.toggle('hidden');
+      }
+    }
+
+    function toggleAllCells() {
+      state.allRevealed = !state.allRevealed;
+      const btnText = document.getElementById('toggle-all-text');
+      const btnIcon = document.getElementById('toggle-all-icon');
+
+      if (state.allRevealed) {
+        revealAll();
+        if (btnText) btnText.textContent = 'Hide All Cells';
+        if (btnIcon) btnIcon.className = 'fa-solid fa-eye-slash';
+      } else {
+        hideAll();
+        if (btnText) btnText.textContent = 'Reveal All Cells';
+        if (btnIcon) btnIcon.className = 'fa-solid fa-eye';
+      }
     }
 
     function revealAll() {
-      document.querySelectorAll('.cell-reveal').forEach(cell => cell.classList.add('revealed'));
+      document.querySelectorAll('.cell-reveal').forEach(cell => {
+        const hiddenBadge = cell.querySelector('.badge-hidden');
+        const valueBadge = cell.querySelector('.badge-value');
+        if (hiddenBadge && valueBadge) {
+          hiddenBadge.classList.add('hidden');
+          valueBadge.classList.remove('hidden');
+        }
+      });
     }
 
     function hideAll() {
-      document.querySelectorAll('.cell-reveal').forEach(cell => cell.classList.remove('revealed'));
+      document.querySelectorAll('.cell-reveal').forEach(cell => {
+        const hiddenBadge = cell.querySelector('.badge-hidden');
+        const valueBadge = cell.querySelector('.badge-value');
+        if (hiddenBadge && valueBadge) {
+          hiddenBadge.classList.remove('hidden');
+          valueBadge.classList.add('hidden');
+        }
+      });
     }
 
     function toggleState(varName) {
@@ -789,38 +953,40 @@
       
       if (state[varName]) {
         btn.textContent = 'T';
-        btn.className = 'btn-toggle btn-true';
+        btn.className = 'w-12 h-10 rounded-lg font-mono font-bold text-sm bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 hover:scale-105 transition shadow-sm';
       } else {
         btn.textContent = 'F';
-        btn.className = 'btn-toggle btn-false';
+        btn.className = 'w-12 h-10 rounded-lg font-mono font-bold text-sm bg-rose-950/80 text-rose-400 border border-rose-500/40 hover:scale-105 transition shadow-sm';
       }
       updateHighlights();
     }
 
     function updateHighlights() {
-      const rows = document.querySelectorAll('tbody tr');
+      const rows = document.querySelectorAll('tbody tr[data-p]');
       rows.forEach(row => {
         const rowP = row.getAttribute('data-p') === 'true';
         const rowQ = row.getAttribute('data-q');
 
         if (rowQ === null) {
           if (rowP === state.p) {
-            row.classList.add('active-row');
+            row.classList.add('active-eval-row');
           } else {
-            row.classList.remove('active-row');
+            row.classList.remove('active-eval-row');
           }
         } else {
           const matchQ = rowQ === 'true';
           if (rowP === state.p && matchQ === state.q) {
-            row.classList.add('active-row');
+            row.classList.add('active-eval-row');
           } else {
-            row.classList.remove('active-row');
+            row.classList.remove('active-eval-row');
           }
         }
       });
     }
 
-    /* Interactive Quiz System */
+    /* -------------------------------------------------------------
+       Interactive Quiz System
+    ------------------------------------------------------------- */
     const questions = [
       {
         q: "Which logical operator evaluates to True ONLY when both inputs (p and q) are True?",
@@ -886,24 +1052,27 @@
 
       questions.forEach((qObj, index) => {
         const card = document.createElement('div');
-        card.className = 'quiz-card';
+        card.className = 'glass-card p-6 space-y-4';
 
         let optionsHTML = '';
         qObj.options.forEach((opt, optIdx) => {
           optionsHTML += `
-            <button class="option-btn" onclick="checkAnswer(${index}, ${optIdx})">
-              ${opt}
+            <button class="option-btn text-left w-full p-4 rounded-xl bg-slate-950/80 hover:bg-slate-800/80 border border-white/10 text-xs sm:text-sm text-slate-200 transition duration-200 flex items-center justify-between group" onclick="checkAnswer(${index}, ${optIdx})">
+              <span>${opt}</span>
+              <i class="fa-regular fa-circle text-slate-500 group-hover:text-brand-400 transition"></i>
             </button>
           `;
         });
 
         card.innerHTML = `
-          <div class="q-number">Question ${index + 1} of ${questions.length}</div>
-          <div class="q-text">${qObj.q}</div>
-          <div class="options-grid" id="options-${index}">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-400">Question ${index + 1} of ${questions.length}</span>
+          </div>
+          <p class="text-sm sm:text-base font-semibold text-white">${qObj.q}</p>
+          <div class="grid grid-cols-1 gap-2.5" id="options-${index}">
             ${optionsHTML}
           </div>
-          <div class="feedback" id="feedback-${index}"></div>
+          <div class="feedback hidden p-4 rounded-xl text-xs sm:text-sm font-sans leading-relaxed border" id="feedback-${index}"></div>
         `;
 
         container.appendChild(card);
@@ -919,15 +1088,21 @@
       buttons.forEach(btn => btn.disabled = true);
 
       if (selectedIdx === qObj.answer) {
-        buttons[selectedIdx].classList.add('correct');
-        feedback.className = 'feedback show correct-fb';
-        feedback.innerHTML = `<strong>Correct!</strong> ${qObj.explanation}`;
+        buttons[selectedIdx].className = 'text-left w-full p-4 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 font-semibold text-xs sm:text-sm flex items-center justify-between';
+        buttons[selectedIdx].querySelector('i').className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+        
+        feedback.className = 'feedback p-4 rounded-xl text-xs sm:text-sm font-sans leading-relaxed border bg-emerald-950/40 border-emerald-500/30 text-emerald-300 block';
+        feedback.innerHTML = `<strong class="text-emerald-400 block mb-1"><i class="fa-solid fa-check mr-1"></i> Correct!</strong> ${qObj.explanation}`;
         currentScore++;
       } else {
-        buttons[selectedIdx].classList.add('wrong');
-        buttons[qObj.answer].classList.add('correct');
-        feedback.className = 'feedback show wrong-fb';
-        feedback.innerHTML = `<strong>Incorrect.</strong> ${qObj.explanation}`;
+        buttons[selectedIdx].className = 'text-left w-full p-4 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 text-xs sm:text-sm flex items-center justify-between';
+        buttons[selectedIdx].querySelector('i').className = 'fa-solid fa-circle-xmark text-rose-400 text-lg';
+
+        buttons[qObj.answer].className = 'text-left w-full p-4 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 font-semibold text-xs sm:text-sm flex items-center justify-between';
+        buttons[qObj.answer].querySelector('i').className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+
+        feedback.className = 'feedback p-4 rounded-xl text-xs sm:text-sm font-sans leading-relaxed border bg-rose-950/40 border-rose-500/30 text-rose-300 block';
+        feedback.innerHTML = `<strong class="text-rose-400 block mb-1"><i class="fa-solid fa-xmark mr-1"></i> Incorrect</strong> ${qObj.explanation}`;
       }
 
       document.getElementById('score').textContent = currentScore;
@@ -939,10 +1114,9 @@
       renderQuiz();
     }
 
-    // Initial setup
+    /* Initial Execution */
     updateHighlights();
     renderQuiz();
   </script>
-
 </body>
 </html>
